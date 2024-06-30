@@ -1314,6 +1314,38 @@ class TrinoConnectionConfig(ConnectionConfig):
             "source": "sqlmesh",
         }
 
+class OracleConnectionConfig(ConnectionConfig):
+    host: str
+    user: t.Optional[str] = None
+    password: t.Optional[str] = None
+    service_name: t.Optional[str] = ""
+    port: t.Optional[int] = 1521
+
+    concurrent_tasks: int = 4
+    register_comments: bool = True
+    pre_ping: bool = True
+
+    type_: Literal["oracle"] = Field(alias="type", default="oracle")
+
+    @property
+    def _connection_kwargs_keys(self) -> t.Set[str]:
+        return {
+            "host",
+            "user",
+            "password",
+            "service_name",
+            "port",
+        }
+
+    @property
+    def _engine_adapter(self) -> t.Type[EngineAdapter]:
+        return engine_adapter.OracleEngineAdapter
+
+    @property
+    def _connection_factory(self) -> t.Callable:
+        import oracledb
+        return oracledb.connect
+
 
 CONNECTION_CONFIG_TO_TYPE = {
     # Map all subclasses of ConnectionConfig to the value of their `type_` field.

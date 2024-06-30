@@ -1,0 +1,23 @@
+gateways:
+  local:
+    connection:
+      type: oracle
+      host: localhost
+      port: 1521
+      user: sqlmesh_test
+      password: sqlmesh_test
+      service_name: ORCLPDB1
+  state:
+    connection:
+      type: oracle
+      host: localhost
+      port: 1521
+      user: sqlmesh_state
+      password: sqlmesh_state
+      service_name: ORCLPDB1
+
+default_gateway: state
+
+model_defaults:
+  dialect: oracle
+  start: 2024-06-21
